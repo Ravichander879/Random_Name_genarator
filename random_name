@@ -1,0 +1,70 @@
+import random
+import string
+from random_username.generate import generate_username
+
+def generate_custom_usernames(count=5, include_numbers=True, include_special_chars=True):
+   
+    adjectives = ["Cool", "Happy", "Lazy", "Fast", "Shy", "Brave", "Smart", "Witty"]
+    nouns = ["Tiger", "Dragon", "Lion", "Panther", "Eagle", "Wolf", "Shark", "Fox"]
+
+    special_characters = list(string.punctuation)
+
+    usernames = []
+    for _ in range(count):
+        username = random.choice(adjectives) + random.choice(nouns)
+        if include_numbers:
+            username += str(random.randint(10, 99))
+        if include_special_chars:
+            username += random.choice(special_characters)
+        usernames.append(username)
+
+    return usernames
+
+def save_usernames_to_file(usernames, filename="usernames.txt"):
+    """
+    Save the generated usernames to a text file.
+
+    Args:
+        usernames (list): List of usernames to save.
+        filename (str): The name of the file to save usernames to.
+    """
+    with open(filename, "w") as file:
+        for username in usernames:
+            file.write(username + "\n")
+    print(f"Usernames saved to {filename}.")
+
+def main():
+    """
+    Main function to generate random usernames with user customization options.
+    """
+    print("Welcome to the Random Username Generator!")
+
+    try:
+        # User input for the number of usernames
+        num_usernames = int(input("How many usernames would you like to generate? "))
+
+        # User preferences
+        include_numbers = input("Include numbers in usernames? (yes/no): ").strip().lower() == "yes"
+        include_special_chars = input("Include special characters in usernames? (yes/no): ").strip().lower() == "yes"
+
+        # Generate usernames
+        usernames = generate_custom_usernames(num_usernames, include_numbers, include_special_chars)
+
+        # Display usernames
+        print("\nGenerated Usernames:")
+        for uname in usernames:
+            print(uname)
+
+        # Save to file option
+        save_option = input("\nWould you like to save these usernames to a file? (yes/no): ").strip().lower()
+        if save_option == "yes":
+            filename = input("Enter the filename (default: usernames.txt): ").strip() or "usernames.txt"
+            save_usernames_to_file(usernames, filename)
+
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+if _name_ == "_main_":
+    main()
